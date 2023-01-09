@@ -1,0 +1,73 @@
+<!-- incluye la hoja de estilos de Bootstrap -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<!-- incluye la biblioteca de Google Maps en tu página -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkp4VBWjx4nAnSiV6e9Hd-uZTr8s0pwVA"></script>
+<h3>Ruta 14</h3>
+<style>
+  /* Start: Google Maps Responsive */
+#map{
+    overflow:hidden;
+    padding-bottom:400px; /*Reduce este valor si el mapa fuera muy alto, por ejemplo 250px, puedes usar porcentajes, 50%*/
+    position:relative;
+    height:0;
+}
+
+#map{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+/* End: Google Maps Responsive */
+</style>
+<h3>Ruta 14</h3><br>
+<!-- crea un elemento div donde se mostrará el mapa -->
+<div id="map"></div>
+
+<script>
+  // creo un mapa en el elemento div con id "map"
+  var map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 14,
+    center: {lat: 22.76176544435643, lng: -102.54747938849908}
+  });
+
+  // creo un servicio de Directions y le paso el mapa
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRenderer = new google.maps.DirectionsRenderer({map: map});
+
+  // defino los puntos de origen y destino
+  var start = new google.maps.LatLng(22.76176544435643, -102.54747938849908);
+  var end = new google.maps.LatLng(22.717678583307382, -102.48683181542064);
+
+  // defino la petición de Directions
+  var request = {
+    origin: start,
+    destination: end,
+    waypoints: [
+    {location: new google.maps.LatLng(22.765246370355136, -102.57692979962212)},
+    {location: new google.maps.LatLng(22.716719523071912, -102.49217042891186)},
+    {location: new google.maps.LatLng(22.715566039621553, -102.4848227841789)},
+  ],
+    travelMode: 'DRIVING'
+  };
+// solicito las indicaciones y dibujo la polyline
+directionsService.route(request, function(result, status) {
+    if (status == 'OK') {
+      // obtengo el array de puntos que forman la polyline
+      var path = result.routes[0].overview_path;
+
+      // creo una polyline con el color café y le paso el array de puntos
+      var polyline = new google.maps.Polyline({
+        strokeColor: '#8B4513',
+        path: path
+      });
+
+      // añado la polyline al mapa
+      polyline.setMap(map);
+
+      // ajusto el mapa para que se vea toda la polyline
+      map.fitBounds(polyline.getBounds());
+    }
+  });
+</script>
